@@ -11,40 +11,53 @@ class HabitsViewController: UIViewController {
 
     // MARK: -Properties
 
+    let detailVC = HabitsDetailViewController()
+
     private lazy var collectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.isScrollEnabled = true
+        collectionView.showsVerticalScrollIndicator = true
         return collectionView
+    }()
+
+    private lazy var uiScrollView: UIScrollView = {
+        let uiScrollView = UIScrollView()
+        uiScrollView.translatesAutoresizingMaskIntoConstraints = false
+        uiScrollView.showsVerticalScrollIndicator = true
+        uiScrollView.isScrollEnabled = true
+        uiScrollView.contentMode = .center
+        return uiScrollView
     }()
 
     private var dataSource: [RegisterCells] = []
     private var habitsArray = HabitsStore.shared.habits
 
-
     // MARK: -LifeCycle
-    override func viewWillAppear(_ animated: Bool) {
+
+      override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: .init(systemName: "plus"),
-                                                            style: .plain,
-                                                            target: self,
-                                                            action: #selector(buttonPressed(_:))
-        )
-        navigationController?.navigationBar.prefersLargeTitles = true
-        navigationItem.rightBarButtonItem?.width = 44
-        navigationItem.rightBarButtonItem?.tintColor = .systemPink
         title = "Сегодня"
-        collectionView.reloadData()
+        print(HabitsStore.shared.habits)
+        navigationController?.navigationBar.prefersLargeTitles = true
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = mainBackgroundColor
         navigationController?.navigationBar.isHidden = false
-        print(HabitsStore.shared.habits)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: .init(systemName: "plus"),
+                                                            style: .plain,
+                                                            target: self,
+                                                            action: #selector(buttonPressed(_:))
+        )
+        navigationItem.rightBarButtonItem?.width = 44
+        navigationItem.rightBarButtonItem?.tintColor = purpleUIColor
         setupModule()
         setupUI()
         setupCollectionView()
+        self.collectionView.reloadData()
     }
 
     // MARK: -Functions
@@ -57,13 +70,20 @@ class HabitsViewController: UIViewController {
     }
 
     private func setupUI() {
+//        view.addSubview(uiScrollView)
+//        uiScrollView.addSubview(collectionView)
         view.addSubview(collectionView)
         let safeArea = view.safeAreaLayoutGuide
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: safeArea.topAnchor, constant: 22),
             collectionView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: 16),
             collectionView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -17),
-            collectionView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor)
+            collectionView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor),
+
+//            collectionView.topAnchor.constraint(equalTo: uiScrollView.topAnchor),
+//            collectionView.leadingAnchor.constraint(equalTo: uiScrollView.leadingAnchor),
+//            collectionView.trailingAnchor.constraint(equalTo: uiScrollView.trailingAnchor),
+//            collectionView.bottomAnchor.constraint(equalTo: uiScrollView.bottomAnchor)
         ])
     }
 
@@ -72,8 +92,6 @@ class HabitsViewController: UIViewController {
         collectionView.register(HabitCollectionViewCell.self, forCellWithReuseIdentifier: HabitCollectionViewCell.id)
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.contentMode = .center
-        collectionView.clipsToBounds = true
         collectionView.layer.cornerRadius = 12
         collectionView.backgroundColor = .clear
     }
@@ -91,6 +109,7 @@ class HabitsViewController: UIViewController {
         cell.configureWith(collectionCell)
         cell.backgroundColor = .white
         cell.layer.cornerRadius = 8
+        cell.updateStatus()
         return cell
     }
 
@@ -116,8 +135,12 @@ extension HabitsViewController: UICollectionViewDelegateFlowLayout, UICollection
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-           return CGSize(width: 343, height: 343)
+        let element = dataSource[indexPath.row]
+        switch element {
+        case .collectionViewCellWith(habit: _): return CGSize(width: 343, height: 130)
+        case .progressCollectionViewCell: return CGSize(width: 343, height: 60)
         }
+    }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
             if section == 0 {
@@ -127,5 +150,14 @@ extension HabitsViewController: UICollectionViewDelegateFlowLayout, UICollection
             }
         }
 
-
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let element = dataSource[indexPath.row]
+        switch element {
+        case .collectionViewCellWith(habit: let habit):
+            detailVC.configure(with: habit)
+            navigationController?.pushViewController(detailVC, animated: true)
+        case .progressCollectionViewCell:
+            return
+        }
+    }
 }

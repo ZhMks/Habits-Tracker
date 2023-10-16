@@ -12,6 +12,7 @@ class HabitCollectionViewCell: UICollectionViewCell {
     // MARK: -Properties
 
     static let id = "HabitTableCell"
+    var selectedHabit: Habit?
 
     private lazy var habitTitle: UILabel = {
         let habitTitle = UILabel()
@@ -40,7 +41,7 @@ class HabitCollectionViewCell: UICollectionViewCell {
         return counter
     }()
 
-    lazy var habitColorImageButton: UIButton = {
+   private lazy var habitColorImageButton: UIButton = {
         let habitColorImage = UIButton()
         habitColorImage.setBackgroundImage(UIImage(systemName: "checkmark"), for: .normal)
         habitColorImage.tintColor = .white
@@ -50,6 +51,7 @@ class HabitCollectionViewCell: UICollectionViewCell {
         habitColorImage.layer.borderWidth = 0.5
         habitColorImage.clipsToBounds = true
         habitColorImage.translatesAutoresizingMaskIntoConstraints = false
+        habitColorImage.addTarget(self, action: #selector(colorImageButtonTapped(_:)), for: .touchUpInside)
         return habitColorImage
     }()
 
@@ -59,6 +61,7 @@ class HabitCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
+        print(selectedHabit?.name)
     }
 
     required init?(coder: NSCoder) {
@@ -74,7 +77,7 @@ class HabitCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(habitColorImageButton)
         contentView.addSubview(counter)
 
-        let safeArea = safeAreaLayoutGuide
+        let safeArea = contentView.safeAreaLayoutGuide
         NSLayoutConstraint.activate([
             habitTitle.topAnchor.constraint(equalTo: safeArea.topAnchor, constant: 20),
             habitTitle.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: 20),
@@ -104,6 +107,19 @@ class HabitCollectionViewCell: UICollectionViewCell {
         habitColorImageButton.layer.borderColor = habit.color.cgColor
         habitText.text = habit.dateString
         habitTitle.textColor = habit.color
+        self.selectedHabit = habit
     }
 
+    @objc func colorImageButtonTapped(_ sender: UIButton) {
+        if !selectedHabit!.isAlreadyTakenToday {
+            habitColorImageButton.backgroundColor = selectedHabit?.color
+            HabitsStore.shared.track(selectedHabit!)
+        } 
+    }
+
+    func updateStatus() {
+        if selectedHabit!.isAlreadyTakenToday {
+            habitColorImageButton.backgroundColor = selectedHabit!.color
+        }
+    }
 }

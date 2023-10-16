@@ -70,6 +70,7 @@ struct Text {
 // Общие цвета
 let mainBackgroundColor = UIColor(red: 242/255, green: 242/255, blue: 247/255, alpha: 1)
 let purpleUIColor = UIColor(red: 161/255, green: 22/255, blue: 204/255, alpha: 1)
+let tabBarMainColor = UIColor(red: 247/255, green: 247/255, blue: 247/255, alpha: 1)
 
 // Состояния для переключения вью создания привычки.
 enum States {

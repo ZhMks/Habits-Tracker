@@ -18,6 +18,8 @@
 		B29EA2312ADAC0D900264927 /* HabitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29EA2302ADAC0D900264927 /* HabitViewController.swift */; };
 		B29EA2332ADAC99E00264927 /* ProgressCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29EA2322ADAC99E00264927 /* ProgressCollectionViewCell.swift */; };
 		B29EA2352ADACA0800264927 /* HabitCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29EA2342ADACA0800264927 /* HabitCollectionViewCell.swift */; };
+		B29EA2382ADD0C8D00264927 /* HabitsDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29EA2372ADD0C8D00264927 /* HabitsDetailViewController.swift */; };
+		B29EA23A2ADD0D7B00264927 /* HabitTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29EA2392ADD0D7B00264927 /* HabitTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +36,8 @@
 		B29EA2302ADAC0D900264927 /* HabitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitViewController.swift; sourceTree = "<group>"; };
 		B29EA2322ADAC99E00264927 /* ProgressCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressCollectionViewCell.swift; sourceTree = "<group>"; };
 		B29EA2342ADACA0800264927 /* HabitCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitCollectionViewCell.swift; sourceTree = "<group>"; };
+		B29EA2372ADD0C8D00264927 /* HabitsDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitsDetailViewController.swift; sourceTree = "<group>"; };
+		B29EA2392ADD0D7B00264927 /* HabitTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +86,7 @@
 			isa = PBXGroup;
 			children = (
 				B29EA2272ADABB1F00264927 /* HabitsViewController.swift */,
+				B29EA2372ADD0C8D00264927 /* HabitsDetailViewController.swift */,
 				B29EA2302ADAC0D900264927 /* HabitViewController.swift */,
 				B29EA2292ADABB2A00264927 /* InfoViewController.swift */,
 			);
@@ -94,6 +99,7 @@
 				B29EA22E2ADABBE500264927 /* InformationForCells.swift */,
 				B29EA2322ADAC99E00264927 /* ProgressCollectionViewCell.swift */,
 				B29EA2342ADACA0800264927 /* HabitCollectionViewCell.swift */,
+				B29EA2392ADD0D7B00264927 /* HabitTableViewCell.swift */,
 			);
 			path = ViewCells;
 			sourceTree = "<group>";
@@ -172,7 +178,9 @@
 				B29EA2282ADABB1F00264927 /* HabitsViewController.swift in Sources */,
 				B29EA2352ADACA0800264927 /* HabitCollectionViewCell.swift in Sources */,
 				B29EA2312ADAC0D900264927 /* HabitViewController.swift in Sources */,
+				B29EA2382ADD0C8D00264927 /* HabitsDetailViewController.swift in Sources */,
 				B29EA22F2ADABBE500264927 /* InformationForCells.swift in Sources */,
+				B29EA23A2ADD0D7B00264927 /* HabitTableViewCell.swift in Sources */,
 				B29EA22A2ADABB2A00264927 /* InfoViewController.swift in Sources */,
 				B29EA22C2ADABB8F00264927 /* HabitsStore.swift in Sources */,
 				B29EA2332ADAC99E00264927 /* ProgressCollectionViewCell.swift in Sources */,

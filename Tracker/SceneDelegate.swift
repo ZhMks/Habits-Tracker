@@ -19,6 +19,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let mainTabBarController = UITabBarController()
         let customUIColor = UIColor(red: 161/255, green: 22/255, blue: 204/255, alpha: 1)
         mainTabBarController.tabBar.tintColor = customUIColor
+        mainTabBarController.tabBar.backgroundColor = tabBarMainColor
 
         window.rootViewController = mainTabBarController
 
