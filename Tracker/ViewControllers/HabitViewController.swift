@@ -15,6 +15,8 @@ class HabitViewController: UIViewController {
     
     private var newCreatedHabit = Habit(name: "", date: .now, color: .clear)
 
+    var completionHandler: ((Habit) -> Void)?
+
     private lazy var textLabel: UILabel = {
         let textPlaceHolder = UILabel()
         textPlaceHolder.translatesAutoresizingMaskIntoConstraints = false
@@ -101,6 +103,7 @@ class HabitViewController: UIViewController {
             timeText.font = UIFont.systemFont(ofSize: 13)
             return timeText
         case .edit:
+            newCreatedHabit.date = selectedHabit!.date
             let timeText = UILabel()
             timeText.translatesAutoresizingMaskIntoConstraints = false
             timeText.text = "\(selectedHabit!.dateString)"
@@ -243,7 +246,7 @@ class HabitViewController: UIViewController {
     
     @objc func datePickerTimeChanged(_ sender: UIDatePicker) {
         let timeStyle = DateFormatter()
-        timeStyle.locale = Locale(identifier: "en_GB")
+        timeStyle.locale = Locale(identifier: "ru_RU")
         timeStyle.timeStyle = .short
         timeStyle.dateFormat = "HH:mm"
         
@@ -257,24 +260,37 @@ class HabitViewController: UIViewController {
     @objc func createButtonPressed(_ sender: UIBarButtonItem) {
         switch state {
         case .create:
-            let store = HabitsStore.shared
-            let newHabit = Habit(name: createHabitNameInput.text!,
-                                 date: datePicker.date,
+            let newHabit = Habit(name: newCreatedHabit.name,
+                                 date: newCreatedHabit.date,
                                  color: newCreatedHabit.color)
-            store.habits.append(newHabit)
+            HabitsStore.shared.habits.append(newHabit)
             navigationController?.dismiss(animated: true)
         case .edit:
             for habit in HabitsStore.shared.habits {
                 if habit.name == selectedHabit?.name {
-                    habit.name = newCreatedHabit.name
-                    habit.color = newCreatedHabit.color
-                    habit.date = newCreatedHabit.date
+                    if  newCreatedHabit.name.isEmpty {
+                        habit.name =  selectedHabit!.name
+                    } else {
+                        habit.name = newCreatedHabit.name
+                        completionHandler?(habit)
+                    }
+                    if habit.color == chooseColorButton.backgroundColor {
+                        habit.color = selectedHabit!.color
+                    } else {
+                        habit.color = newCreatedHabit.color
+                    }
+                    if habit.date == newCreatedHabit.date {
+                        habit.date = selectedHabit!.date
+                    } else {
+                        habit.date = newCreatedHabit.date
+                    }
+                }
                     navigationController?.dismiss(animated: true)
                 }
             }
         }
-    }
-    
+
+
     @objc func abortButtonPressed(_ sender: UIBarButtonItem) {
         navigationController?.dismiss(animated: true)
     }

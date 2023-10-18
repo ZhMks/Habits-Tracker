@@ -14,6 +14,8 @@ class HabitCollectionViewCell: UICollectionViewCell {
     static let id = "HabitTableCell"
     var selectedHabit: Habit?
 
+    var countNumber = 0
+
     private lazy var habitTitle: UILabel = {
         let habitTitle = UILabel()
         habitTitle.textColor = .systemBlue
@@ -35,24 +37,28 @@ class HabitCollectionViewCell: UICollectionViewCell {
     private lazy var counter: UILabel = {
         let counter = UILabel()
         counter.textColor = .systemGray
-        counter.text = "Счетчик: 100"
+        counter.text = "Счетчик: \(countNumber)"
         counter.font = UIFont.systemFont(ofSize: 13)
         counter.translatesAutoresizingMaskIntoConstraints = false
         return counter
     }()
 
-   private lazy var habitColorImageButton: UIButton = {
+    lazy var habitColorImageButton: UIButton = {
         let habitColorImage = UIButton()
-        habitColorImage.setBackgroundImage(UIImage(systemName: "checkmark"), for: .normal)
-        habitColorImage.tintColor = .white
-        habitColorImage.backgroundColor = .clear
-        habitColorImage.contentMode = .center
         habitColorImage.layer.cornerRadius = 18
-        habitColorImage.layer.borderWidth = 0.5
+        habitColorImage.layer.borderWidth = 1
         habitColorImage.clipsToBounds = true
         habitColorImage.translatesAutoresizingMaskIntoConstraints = false
-        habitColorImage.addTarget(self, action: #selector(colorImageButtonTapped(_:)), for: .touchUpInside)
+       habitColorImage.addTarget(self, action: #selector(colorImageButtonTapped(_:)), for: .touchUpInside)
         return habitColorImage
+    }()
+
+    private var checkmarkImage: UIImageView = {
+        let checkmarkImage = UIImageView(frame: CGRect(x: 0, y: 0, width: 4, height: 4))
+        checkmarkImage.translatesAutoresizingMaskIntoConstraints = false
+        checkmarkImage.image = UIImage(systemName: "checkmark")
+        checkmarkImage.tintColor = .white
+        return checkmarkImage
     }()
 
     // MARK: -LifeCycle
@@ -76,6 +82,7 @@ class HabitCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(habitText)
         contentView.addSubview(habitColorImageButton)
         contentView.addSubview(counter)
+        contentView.addSubview(checkmarkImage)
 
         let safeArea = contentView.safeAreaLayoutGuide
         NSLayoutConstraint.activate([
@@ -98,7 +105,10 @@ class HabitCollectionViewCell: UICollectionViewCell {
             habitColorImageButton.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -25),
             habitColorImageButton.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor, constant: -46),
             habitColorImageButton.widthAnchor.constraint(equalToConstant: 38),
-            habitColorImageButton.heightAnchor.constraint(equalToConstant: 38)
+            habitColorImageButton.heightAnchor.constraint(equalToConstant: 38),
+
+            checkmarkImage.centerXAnchor.constraint(equalTo: habitColorImageButton.centerXAnchor),
+            checkmarkImage.centerYAnchor.constraint(equalTo: habitColorImageButton.centerYAnchor)
         ])
     }
 
@@ -114,7 +124,8 @@ class HabitCollectionViewCell: UICollectionViewCell {
         if !selectedHabit!.isAlreadyTakenToday {
             habitColorImageButton.backgroundColor = selectedHabit?.color
             HabitsStore.shared.track(selectedHabit!)
-        } 
+            countNumber += 1
+        }
     }
 
     func updateStatus() {

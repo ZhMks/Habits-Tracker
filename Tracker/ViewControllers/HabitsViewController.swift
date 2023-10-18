@@ -12,6 +12,7 @@ class HabitsViewController: UIViewController {
     // MARK: -Properties
 
     let detailVC = HabitsDetailViewController()
+    var selectedHabit: Habit?
 
     private lazy var collectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
@@ -41,6 +42,11 @@ class HabitsViewController: UIViewController {
         title = "Сегодня"
         print(HabitsStore.shared.habits)
         navigationController?.navigationBar.prefersLargeTitles = true
+        collectionView.reloadData()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
     }
 
     override func viewDidLoad() {
@@ -57,7 +63,6 @@ class HabitsViewController: UIViewController {
         setupModule()
         setupUI()
         setupCollectionView()
-        self.collectionView.reloadData()
     }
 
     // MARK: -Functions
@@ -70,8 +75,7 @@ class HabitsViewController: UIViewController {
     }
 
     private func setupUI() {
-//        view.addSubview(uiScrollView)
-//        uiScrollView.addSubview(collectionView)
+
         view.addSubview(collectionView)
         let safeArea = view.safeAreaLayoutGuide
         NSLayoutConstraint.activate([
@@ -79,11 +83,6 @@ class HabitsViewController: UIViewController {
             collectionView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: 16),
             collectionView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -17),
             collectionView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor),
-
-//            collectionView.topAnchor.constraint(equalTo: uiScrollView.topAnchor),
-//            collectionView.leadingAnchor.constraint(equalTo: uiScrollView.leadingAnchor),
-//            collectionView.trailingAnchor.constraint(equalTo: uiScrollView.trailingAnchor),
-//            collectionView.bottomAnchor.constraint(equalTo: uiScrollView.bottomAnchor)
         ])
     }
 
@@ -110,6 +109,7 @@ class HabitsViewController: UIViewController {
         cell.backgroundColor = .white
         cell.layer.cornerRadius = 8
         cell.updateStatus()
+        collectionView.reloadItems(at: [indexPath])
         return cell
     }
 

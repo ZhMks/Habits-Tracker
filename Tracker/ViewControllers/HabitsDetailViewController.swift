@@ -41,7 +41,7 @@ class HabitsDetailViewController: UIViewController {
         }
         navigationController?.navigationBar.prefersLargeTitles = false
         deleteButtonPressed = .no
-        uiTableView.reloadSectionIndexTitles()
+        uiTableView.reloadData()
     }
 
     override func viewDidLoad() {
@@ -75,6 +75,9 @@ class HabitsDetailViewController: UIViewController {
         let habitVC = HabitViewController()
         state = .edit
         habitVC.selectedHabit = self.selectedHabit
+        habitVC.completionHandler = { [weak self] habit in
+            self?.title = habit.name
+        }
         let navigationVC = UINavigationController(rootViewController: habitVC)
         navigationVC.modalPresentationStyle = .fullScreen
         navigationController?.present(navigationVC, animated: true)
