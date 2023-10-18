@@ -60,16 +60,17 @@ class HabitTableViewCell: UITableViewCell {
 
     func configure(with dates: Date, and habit: Habit) {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "en_GB"
+        dateFormatter.dateFormat = "ru_RU"
         dateFormatter.dateStyle = .long
         dateString.text = dateFormatter.string(from: dates)
 
-        if HabitsStore.shared.dates.contains(where: { $0 == habit.date }) && HabitsStore.shared.habit(habit, isTrackedIn: habit.date) {
-            accessoryType = .checkmark
-            tintColor = purpleUIColor
-        } else {
-            return
+        if HabitsStore.shared.dates.contains(where: { $0 == habit.date }) && HabitsStore.shared.habit(habit, isTrackedIn: habit.date){
+                accessoryType = .checkmark
+                tintColor = purpleUIColor
+            } else {
+                return
         }
+
     }
 }
 
