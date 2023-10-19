@@ -101,7 +101,10 @@ extension HabitsDetailViewController: UITableViewDataSource, UITableViewDelegate
         let dataSource = HabitsStore.shared.dates[indexPath.row]
         if let selectedHabit = selectedHabit {
             cell.configure(with: dataSource, and: selectedHabit)
-            cell.accessoryType = HabitsStore.shared.habit(selectedHabit, isTrackedIn: dataSource) ? .checkmark : .none
+            if HabitsStore.shared.habit(selectedHabit, isTrackedIn: dataSource) {
+                cell.accessoryType = .checkmark
+                cell.tintColor = purpleUIColor
+            }
         }
         return cell
     }

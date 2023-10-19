@@ -294,6 +294,7 @@ class HabitViewController: UIViewController {
                         habit.date = newCreatedHabit.date
                     }
                 }
+                HabitsStore.shared.save()
                 navigationController?.dismiss(animated: true)
             }
         }

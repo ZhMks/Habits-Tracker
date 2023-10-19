@@ -191,7 +191,7 @@ public final class HabitsStore {
         }
     }
 
-    private func save() {
+    public func save() {
         do {
             let data = try encoder.encode(habits)
             userDefaults.setValue(data, forKey: "habits")

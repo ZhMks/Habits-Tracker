@@ -14,7 +14,7 @@ class HabitCollectionViewCell: UICollectionViewCell {
     static let id = "HabitTableCell"
     var selectedHabit: Habit?
 
-    var countNumber = 0
+    var countNumber: Int = 0
 
     private lazy var habitTitle: UILabel = {
         let habitTitle = UILabel()
@@ -37,7 +37,7 @@ class HabitCollectionViewCell: UICollectionViewCell {
     private lazy var counter: UILabel = {
         let counter = UILabel()
         counter.textColor = .systemGray
-        counter.text = "Счетчик: \(countNumber)"
+        counter.text = ""
         counter.font = UIFont.systemFont(ofSize: 13)
         counter.translatesAutoresizingMaskIntoConstraints = false
         return counter
@@ -66,7 +66,6 @@ class HabitCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
-        print(selectedHabit?.name)
     }
 
     required init?(coder: NSCoder) {
@@ -117,6 +116,9 @@ class HabitCollectionViewCell: UICollectionViewCell {
         habitText.text = habit.dateString
         habitTitle.textColor = habit.color
         self.selectedHabit = habit
+        countNumber = habit.trackDates.count
+        counter.text = "Счетчик: \(countNumber)"
+
     }
 
     @objc func colorImageButtonTapped(_ sender: UIButton) {

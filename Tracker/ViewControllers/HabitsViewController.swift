@@ -108,6 +108,7 @@ extension HabitsViewController: UICollectionViewDelegateFlowLayout, UICollection
             self.selectedHabit = dataSource
             cell.backgroundColor = .white
             cell.layer.cornerRadius = 8
+            cell.updateStatus()
             return cell
         }
     }
