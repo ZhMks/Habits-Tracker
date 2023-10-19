@@ -8,11 +8,11 @@
 import UIKit
 
 class HabitViewController: UIViewController {
-    
+
     // MARK: -Properties
-    
+
     var selectedHabit: Habit?
-    
+
     private var newCreatedHabit = Habit(name: "", date: .now, color: .clear)
 
     var completionHandler: ((Habit) -> Void)?
@@ -26,7 +26,7 @@ class HabitViewController: UIViewController {
         textPlaceHolder.font = UIFont.systemFont(ofSize: 13, weight: fontWeight)
         return textPlaceHolder
     }()
-    
+
     private lazy var createHabitNameInput: UITextField = {
         switch state{
         case .create:
@@ -51,7 +51,7 @@ class HabitViewController: UIViewController {
             return addTextInput
         }
     }()
-    
+
     private lazy var chooseColorLabel: UILabel = {
         let colorPlaceHolder = UILabel()
         colorPlaceHolder.translatesAutoresizingMaskIntoConstraints = false
@@ -60,7 +60,7 @@ class HabitViewController: UIViewController {
         colorPlaceHolder.font = UIFont.systemFont(ofSize: 13, weight: fontWeight)
         return colorPlaceHolder
     }()
-    
+
     private lazy var chooseColorButton: UIButton = {
         switch state {
         case .create:
@@ -83,7 +83,7 @@ class HabitViewController: UIViewController {
             return chooseColorView
         }
     }()
-    
+
     private lazy var timeTextLabel: UILabel = {
         let timeTextPlaceholder = UILabel()
         timeTextPlaceholder.translatesAutoresizingMaskIntoConstraints = false
@@ -93,7 +93,7 @@ class HabitViewController: UIViewController {
         timeTextPlaceholder.font = UIFont.systemFont(ofSize: 13, weight: fontWeight)
         return timeTextPlaceholder
     }()
-    
+
     private lazy var timeText: UILabel = {
         switch state {
         case .create:
@@ -112,7 +112,7 @@ class HabitViewController: UIViewController {
             return timeText
         }
     }()
-    
+
     private lazy var datePicker: UIDatePicker = {
         let datePicker = UIDatePicker()
         datePicker.translatesAutoresizingMaskIntoConstraints = false
@@ -122,7 +122,7 @@ class HabitViewController: UIViewController {
         datePicker.addTarget(self, action: #selector(datePickerTimeChanged(_:)), for: .valueChanged)
         return datePicker
     }()
-    
+
     private lazy var alertButton: UIButton = {
         let alertButton = UIButton(type: .system)
         alertButton.translatesAutoresizingMaskIntoConstraints = false
@@ -132,30 +132,24 @@ class HabitViewController: UIViewController {
         alertButton.addTarget(self, action: #selector(deleteButtonTapped(_:)), for: .touchUpInside)
         return alertButton
     }()
-    
+
     // MARK: -LifeCycle
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         navigationController?.navigationBar.isHidden = false
         navigationController?.navigationBar.prefersLargeTitles = false
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         view.backgroundColor = mainBackgroundColor
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Сохранить", style: .done, target: self, action: #selector(createButtonPressed(_:)))
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Отмена", style: .done, target: self, action: #selector(abortButtonPressed(_:)))
-        let attributes: [NSAttributedString.Key : Any] = [ .font: UIFont.boldSystemFont(ofSize: 17) ]
-        navigationItem.rightBarButtonItem?.setTitleTextAttributes(attributes, for: .normal)
-        let leftButtonAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.systemFont(ofSize: 17)]
-        navigationItem.leftBarButtonItem?.setTitleTextAttributes(leftButtonAttributes, for: .normal)
-        navigationController?.navigationBar.tintColor = purpleUIColor
-        navigationItem.title = state.navTitle
+        setupNavigationBar()
+
     }
-    
-    
-    
+
+
+
     // MARK: -Functions
     private func placeSubviews() {
         view.addSubview(textLabel)
@@ -167,7 +161,18 @@ class HabitViewController: UIViewController {
         view.addSubview(datePicker)
         view.addSubview(alertButton)
     }
-    
+
+    private func setupNavigationBar() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Сохранить", style: .done, target: self, action: #selector(createButtonPressed(_:)))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Отмена", style: .done, target: self, action: #selector(abortButtonPressed(_:)))
+        let attributes: [NSAttributedString.Key : Any] = [ .font: UIFont.boldSystemFont(ofSize: 17) ]
+        navigationItem.rightBarButtonItem?.setTitleTextAttributes(attributes, for: .normal)
+        let leftButtonAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.systemFont(ofSize: 17)]
+        navigationItem.leftBarButtonItem?.setTitleTextAttributes(leftButtonAttributes, for: .normal)
+        navigationController?.navigationBar.tintColor = purpleUIColor
+        navigationItem.title = state.navTitle
+    }
+
     private func setupUI() {
         placeSubviews()
         let safeArea = view.safeAreaLayoutGuide
@@ -176,43 +181,43 @@ class HabitViewController: UIViewController {
             textLabel.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: 16),
             textLabel.bottomAnchor.constraint(equalTo: datePicker.topAnchor, constant: -176),
             textLabel.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -285),
-            
+
             createHabitNameInput.heightAnchor.constraint(equalToConstant: 22),
             createHabitNameInput.widthAnchor.constraint(equalToConstant: 295),
             createHabitNameInput.topAnchor.constraint(equalTo: textLabel.bottomAnchor, constant: 7),
             createHabitNameInput.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: 16),
-            
+
             chooseColorLabel.topAnchor.constraint(equalTo: createHabitNameInput.bottomAnchor, constant: 15),
             chooseColorLabel.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: 16),
             chooseColorLabel.widthAnchor.constraint(equalToConstant: 36),
             chooseColorLabel.heightAnchor.constraint(equalToConstant: 16),
-            
+
             chooseColorButton.topAnchor.constraint(equalTo: chooseColorLabel.bottomAnchor, constant: 7),
             chooseColorButton.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: 16),
             chooseColorButton.widthAnchor.constraint(equalToConstant: 30),
-            
+
             timeTextLabel.topAnchor.constraint(equalTo: chooseColorButton.bottomAnchor, constant: 15),
             timeTextLabel.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: 16),
             timeTextLabel.widthAnchor.constraint(equalToConstant: 47),
             timeTextLabel.heightAnchor.constraint(equalToConstant: 18),
-            
+
             timeText.topAnchor.constraint(equalTo: timeTextLabel.bottomAnchor, constant: 7),
             timeText.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: 16),
             timeText.widthAnchor.constraint(equalToConstant: 194),
             timeText.heightAnchor.constraint(equalToConstant: 22),
-            
+
             datePicker.topAnchor.constraint(equalTo: timeText.bottomAnchor, constant: 15),
             datePicker.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor,constant: 16),
             datePicker.widthAnchor.constraint(equalToConstant: 375),
             datePicker.heightAnchor.constraint(equalToConstant: 216),
-            
+
             alertButton.topAnchor.constraint(equalTo: datePicker.bottomAnchor, constant: 219),
             alertButton.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: 114.5),
             alertButton.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -113.5),
             alertButton.heightAnchor.constraint(equalToConstant: 22)
         ])
     }
-    
+
     @objc func deleteButtonTapped(_ sender: UIButton) {
         switch state {
         case .create: break
@@ -220,18 +225,19 @@ class HabitViewController: UIViewController {
             let alertController = UIAlertController(title: "Удалить привычку",
                                                     message: "Вы хотите удалить привычку \(selectedHabit!.name)?",
                                                     preferredStyle: .alert)
-            
+
             let alertActionLeft = UIAlertAction(title: "Отмена", style: .default)
             let alertActionRight = UIAlertAction(title: "Удалить", style: .default, handler: { _ in
                 for habit in HabitsStore.shared.habits {
+                    print(habit.name, self.selectedHabit!.name)
                     if habit.name == self.selectedHabit!.name {
-                        HabitsStore.shared.habits.removeAll(where: { $0.name == habit.name })
+                        HabitsStore.shared.habits.removeAll(where: { $0.name == self.selectedHabit!.name })
                         deleteButtonPressed = .yes
                         self.navigationController!.dismiss(animated: true)
                     }
                 }
             })
-            
+
             alertActionRight.setValue(UIColor.red, forKey: "_titleTextColor")
             alertController.addAction(alertActionLeft)
             alertController.addAction(alertActionRight)
@@ -243,20 +249,22 @@ class HabitViewController: UIViewController {
         colorPicker.delegate = self
         navigationController!.present(colorPicker, animated: true)
     }
-    
+
     @objc func datePickerTimeChanged(_ sender: UIDatePicker) {
         let timeStyle = DateFormatter()
         timeStyle.locale = Locale(identifier: "ru_RU")
         timeStyle.timeStyle = .short
         timeStyle.dateFormat = "HH:mm"
-        
+
         // Про цвет нашел решение в интернете. Сам так и не понял как сделать строку с атрибутами.
-        let attributedWithTextColor: NSAttributedString = "Каждый день в \(timeStyle.string(from: sender.date))".attributedStringWithColor(["\(timeStyle.string(from: sender.date))"], color: purpleUIColor)
-        
+        let attributedWithTextColor: NSAttributedString = "Каждый день в \(timeStyle.string(from: sender.date))".attributedStringWithColor(
+            ["\(timeStyle.string(from: sender.date))"], color: purpleUIColor
+        )
+
         timeText.attributedText = attributedWithTextColor
         newCreatedHabit.date = sender.date
     }
-    
+
     @objc func createButtonPressed(_ sender: UIBarButtonItem) {
         switch state {
         case .create:
@@ -278,6 +286,7 @@ class HabitViewController: UIViewController {
                         habit.color = selectedHabit!.color
                     } else {
                         habit.color = newCreatedHabit.color
+
                     }
                     if habit.date == newCreatedHabit.date {
                         habit.date = selectedHabit!.date
@@ -285,10 +294,10 @@ class HabitViewController: UIViewController {
                         habit.date = newCreatedHabit.date
                     }
                 }
-                    navigationController?.dismiss(animated: true)
-                }
+                navigationController?.dismiss(animated: true)
             }
         }
+    }
 
 
     @objc func abortButtonPressed(_ sender: UIBarButtonItem) {
@@ -300,21 +309,21 @@ class HabitViewController: UIViewController {
 // MARK: -Extensions
 
 extension HabitViewController: UIColorPickerViewControllerDelegate, UITextFieldDelegate {
-    
+
     func colorPickerViewControllerDidFinish(_ viewController: UIColorPickerViewController) {
         let selectedColor = viewController.selectedColor
         newCreatedHabit.color = selectedColor
     }
-    
+
     func colorPickerViewController(_ viewController: UIColorPickerViewController, didSelect color: UIColor, continuously: Bool) {
         chooseColorButton.backgroundColor = viewController.selectedColor
     }
-    
+
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
-    
+
     @objc func textChangedIn(_ textField: UITextField) {
         if let text = textField.text {
             createHabitNameInput.text = text

@@ -20,6 +20,11 @@ class HabitsViewController: UIViewController {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.isScrollEnabled = true
         collectionView.showsVerticalScrollIndicator = true
+        collectionView.register(HabitCollectionViewCell.self, forCellWithReuseIdentifier: HabitCollectionViewCell.id)
+        collectionView.register(ProgressCollectionViewCell.self, forCellWithReuseIdentifier: ProgressCollectionViewCell.id)
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.backgroundColor = .clear
         return collectionView
     }()
 
@@ -32,23 +37,15 @@ class HabitsViewController: UIViewController {
         return uiScrollView
     }()
 
-    private var dataSource: [RegisterCells] = []
-    private var habitsArray = HabitsStore.shared.habits
 
     // MARK: -LifeCycle
 
-      override func viewWillAppear(_ animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         title = "Сегодня"
-        print(HabitsStore.shared.habits)
         navigationController?.navigationBar.prefersLargeTitles = true
         collectionView.reloadData()
     }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = mainBackgroundColor
@@ -60,9 +57,7 @@ class HabitsViewController: UIViewController {
         )
         navigationItem.rightBarButtonItem?.width = 44
         navigationItem.rightBarButtonItem?.tintColor = purpleUIColor
-        setupModule()
         setupUI()
-        setupCollectionView()
     }
 
     // MARK: -Functions
@@ -75,7 +70,6 @@ class HabitsViewController: UIViewController {
     }
 
     private func setupUI() {
-
         view.addSubview(collectionView)
         let safeArea = view.safeAreaLayoutGuide
         NSLayoutConstraint.activate([
@@ -85,79 +79,57 @@ class HabitsViewController: UIViewController {
             collectionView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor),
         ])
     }
-
-    private func setupCollectionView() {
-        collectionView.register(ProgressCollectionViewCell.self, forCellWithReuseIdentifier: ProgressCollectionViewCell.id)
-        collectionView.register(HabitCollectionViewCell.self, forCellWithReuseIdentifier: HabitCollectionViewCell.id)
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.layer.cornerRadius = 12
-        collectionView.backgroundColor = .clear
-    }
-
-    private func setupModule() {
-        dataSource = [RegisterCells.progressCollectionViewCell]
-
-        for habit in habitsArray {
-            dataSource.append(RegisterCells.collectionViewCellWith(habit: habit))
-        }
-    }
-
-    private func prepareCollectionViewCell(collectionCell: Habit, for indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HabitCollectionViewCell.id, for: indexPath) as? HabitCollectionViewCell else { return UICollectionViewCell() }
-        cell.configureWith(collectionCell)
-        cell.backgroundColor = .white
-        cell.layer.cornerRadius = 8
-        cell.updateStatus()
-        collectionView.reloadItems(at: [indexPath])
-        return cell
-    }
-
-    private func prepareProgressCollectionViewCell(for indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProgressCollectionViewCell.id, for: indexPath) as? ProgressCollectionViewCell else { return UICollectionViewCell() }
-        cell.backgroundColor = .white
-        return cell
-    }
 }
+
 
 extension HabitsViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
 
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        2
+    }
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return dataSource.count
+        if section == 0 {
+            return 1
+        } else {
+            return HabitsStore.shared.habits.count
+        }
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let element = dataSource[indexPath.row]
-        switch element {
-        case .collectionViewCellWith(habit: let habit): return prepareCollectionViewCell(collectionCell: habit, for: indexPath)
-        case .progressCollectionViewCell: return prepareProgressCollectionViewCell(for: indexPath)
+        if indexPath.section == 0 {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProgressCollectionViewCell.id, for: indexPath) as? ProgressCollectionViewCell else { return UICollectionViewCell() }
+            cell.backgroundColor = .white
+            return cell
+           }  else {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HabitCollectionViewCell.id, for: indexPath) as? HabitCollectionViewCell else { return UICollectionViewCell() }
+            let dataSource = HabitsStore.shared.habits[indexPath.row]
+            cell.configureWith(dataSource)
+            self.selectedHabit = dataSource
+            cell.backgroundColor = .white
+            cell.layer.cornerRadius = 8
+            return cell
         }
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let element = dataSource[indexPath.row]
-        switch element {
-        case .collectionViewCellWith(habit: _): return CGSize(width: 343, height: 130)
-        case .progressCollectionViewCell: return CGSize(width: 343, height: 60)
+        if indexPath.section == 0 {
+            return CGSize(width: 343, height: 60)
+        } else {
+            return CGSize(width: 343, height: 130)
         }
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-            if section == 0 {
-                return UIEdgeInsets(top: 0, left: 0, bottom: 18, right: 0)
-            } else {
-                return UIEdgeInsets(top: 0, left: 0, bottom: 12, right: 0 )
-            }
+        if section == 0 {
+            return UIEdgeInsets(top: 0, left: 0, bottom: 18, right: 0)
+        } else {
+            return UIEdgeInsets(top: 0, left: 0, bottom: 12, right: 0)
         }
+    }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let element = dataSource[indexPath.row]
-        switch element {
-        case .collectionViewCellWith(habit: let habit):
-            detailVC.configure(with: habit)
-            navigationController?.pushViewController(detailVC, animated: true)
-        case .progressCollectionViewCell:
-            return
-        }
+        detailVC.configure(with: selectedHabit!)
+        navigationController?.pushViewController(detailVC, animated: true)
     }
 }

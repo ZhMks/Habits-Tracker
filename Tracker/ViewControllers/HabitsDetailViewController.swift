@@ -75,6 +75,7 @@ class HabitsDetailViewController: UIViewController {
         let habitVC = HabitViewController()
         state = .edit
         habitVC.selectedHabit = self.selectedHabit
+        print("habitVC.selectedHabit in HabitsDetailVC is \(habitVC.selectedHabit!.name)")
         habitVC.completionHandler = { [weak self] habit in
             self?.title = habit.name
         }
@@ -100,6 +101,7 @@ extension HabitsDetailViewController: UITableViewDataSource, UITableViewDelegate
         let dataSource = HabitsStore.shared.dates[indexPath.row]
         if let selectedHabit = selectedHabit {
             cell.configure(with: dataSource, and: selectedHabit)
+            cell.accessoryType = HabitsStore.shared.habit(selectedHabit, isTrackedIn: dataSource) ? .checkmark : .none
         }
         return cell
     }

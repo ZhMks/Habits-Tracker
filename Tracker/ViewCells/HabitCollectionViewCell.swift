@@ -63,7 +63,6 @@ class HabitCollectionViewCell: UICollectionViewCell {
 
     // MARK: -LifeCycle
 
-
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
