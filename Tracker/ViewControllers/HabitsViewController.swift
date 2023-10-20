@@ -100,6 +100,7 @@ extension HabitsViewController: UICollectionViewDelegateFlowLayout, UICollection
         if indexPath.section == 0 {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProgressCollectionViewCell.id, for: indexPath) as? ProgressCollectionViewCell else { return UICollectionViewCell() }
             cell.backgroundColor = .white
+            cell.updateStatus()
             return cell
            }  else {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HabitCollectionViewCell.id, for: indexPath) as? HabitCollectionViewCell else { return UICollectionViewCell() }

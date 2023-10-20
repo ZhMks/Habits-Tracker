@@ -12,6 +12,7 @@ class ProgressCollectionViewCell: UICollectionViewCell {
     // MARK: -Properties
 
     static let id = "ProgressCollectionViewCell"
+    var number = 0
 
     private lazy var progressBar: UIProgressView = {
         let progressBar = UIProgressView(progressViewStyle: .bar)
@@ -34,7 +35,6 @@ class ProgressCollectionViewCell: UICollectionViewCell {
 
     private lazy var percentage: UILabel = {
         let percentage = UILabel()
-        let number = 100
         let percent = Float(number) * HabitsStore.shared.todayProgress
         percentage.translatesAutoresizingMaskIntoConstraints = false
         percentage.text = "\(percent)%"
@@ -83,4 +83,10 @@ class ProgressCollectionViewCell: UICollectionViewCell {
 
             ])
         }
+
+    func updateStatus() {
+        progressBar.progress = HabitsStore.shared.todayProgress
+        number = Int(Float(100) * HabitsStore.shared.todayProgress)
+        percentage.text = "\(number)%"
+    }
 }
