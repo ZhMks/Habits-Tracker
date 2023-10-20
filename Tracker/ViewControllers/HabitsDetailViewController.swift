@@ -75,7 +75,6 @@ class HabitsDetailViewController: UIViewController {
         let habitVC = HabitViewController()
         state = .edit
         habitVC.selectedHabit = self.selectedHabit
-        print("habitVC.selectedHabit in HabitsDetailVC is \(habitVC.selectedHabit!.name)")
         habitVC.completionHandler = { [weak self] habit in
             self?.title = habit.name
         }

@@ -106,7 +106,6 @@ extension HabitsViewController: UICollectionViewDelegateFlowLayout, UICollection
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HabitCollectionViewCell.id, for: indexPath) as? HabitCollectionViewCell else { return UICollectionViewCell() }
             let dataSource = HabitsStore.shared.habits[indexPath.row]
             cell.configureWith(dataSource)
-            self.selectedHabit = dataSource
             cell.backgroundColor = .white
             cell.layer.cornerRadius = 8
             cell.updateStatus()
@@ -131,7 +130,8 @@ extension HabitsViewController: UICollectionViewDelegateFlowLayout, UICollection
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        detailVC.configure(with: selectedHabit!)
+        self.selectedHabit = HabitsStore.shared.habits[indexPath.row]
+        detailVC.configure(with: self.selectedHabit!)
         navigationController?.pushViewController(detailVC, animated: true)
     }
 }

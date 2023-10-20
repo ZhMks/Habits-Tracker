@@ -229,9 +229,9 @@ class HabitViewController: UIViewController {
             let alertActionLeft = UIAlertAction(title: "Отмена", style: .default)
             let alertActionRight = UIAlertAction(title: "Удалить", style: .default, handler: { _ in
                 for habit in HabitsStore.shared.habits {
-                    print(habit.name, self.selectedHabit!.name)
                     if habit.name == self.selectedHabit!.name {
                         HabitsStore.shared.habits.removeAll(where: { $0.name == self.selectedHabit!.name })
+                        HabitsStore.shared.save()
                         deleteButtonPressed = .yes
                         self.navigationController!.dismiss(animated: true)
                     }
