@@ -233,6 +233,8 @@ class HabitViewController: UIViewController {
                         HabitsStore.shared.habits.removeAll(where: { $0.name == self.selectedHabit!.name })
                         HabitsStore.shared.save()
                         deleteButtonPressed = .yes
+                        let notification = NotificationCenter.default
+                        notification.post(name: NSNotification.Name("progress"), object: nil)
                         self.navigationController!.dismiss(animated: true)
                     }
                 }

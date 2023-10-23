@@ -122,10 +122,12 @@ class HabitCollectionViewCell: UICollectionViewCell {
     }
 
     @objc func colorImageButtonTapped(_ sender: UIButton) {
+        let notification = NotificationCenter.default
         if !selectedHabit!.isAlreadyTakenToday {
             habitColorImageButton.backgroundColor = selectedHabit?.color
             HabitsStore.shared.track(selectedHabit!)
             countNumber += 1
+            notification.post(Notification(name: Notification.Name(rawValue: "progress") ))
         }
     }
 

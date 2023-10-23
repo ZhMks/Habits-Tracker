@@ -47,7 +47,7 @@ class ProgressCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
            super.init(frame: frame)
            layer.cornerRadius = 8
-           setupUI()
+           setupUI() 
        }
 
 

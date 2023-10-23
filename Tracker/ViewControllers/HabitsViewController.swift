@@ -13,6 +13,7 @@ class HabitsViewController: UIViewController {
 
     let detailVC = HabitsDetailViewController()
     var selectedHabit: Habit?
+    var progressCell: UICollectionViewCell?
 
     private lazy var collectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
@@ -45,6 +46,8 @@ class HabitsViewController: UIViewController {
         title = "Сегодня"
         navigationController?.navigationBar.prefersLargeTitles = true
         collectionView.reloadData()
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(updateProgressCell(_:)), name: NSNotification.Name("progress"), object: nil)
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -79,6 +82,12 @@ class HabitsViewController: UIViewController {
             collectionView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor),
         ])
     }
+
+    @objc func updateProgressCell(_ notification: Notification) {
+        if let newCell = self.progressCell as? ProgressCollectionViewCell {
+            newCell.updateStatus()
+        }
+    }
 }
 
 
@@ -100,7 +109,7 @@ extension HabitsViewController: UICollectionViewDelegateFlowLayout, UICollection
         if indexPath.section == 0 {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProgressCollectionViewCell.id, for: indexPath) as? ProgressCollectionViewCell else { return UICollectionViewCell() }
             cell.backgroundColor = .white
-            cell.updateStatus()
+            self.progressCell = cell
             return cell
            }  else {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HabitCollectionViewCell.id, for: indexPath) as? HabitCollectionViewCell else { return UICollectionViewCell() }
