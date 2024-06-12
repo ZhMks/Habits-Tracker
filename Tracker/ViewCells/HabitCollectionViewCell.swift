@@ -118,7 +118,6 @@ class HabitCollectionViewCell: UICollectionViewCell {
         self.selectedHabit = habit
         countNumber = habit.trackDates.count
         counter.text = "Счетчик: \(countNumber)"
-
     }
 
     @objc func colorImageButtonTapped(_ sender: UIButton) {
