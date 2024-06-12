@@ -258,7 +258,6 @@ class HabitViewController: UIViewController {
         timeStyle.timeStyle = .short
         timeStyle.dateFormat = "HH:mm"
 
-        // Про цвет нашел решение в интернете. Сам так и не понял как сделать строку с атрибутами.
         let attributedWithTextColor: NSAttributedString = "Каждый день в \(timeStyle.string(from: sender.date))".attributedStringWithColor(
             ["\(timeStyle.string(from: sender.date))"], color: purpleUIColor
         )
@@ -274,6 +273,7 @@ class HabitViewController: UIViewController {
                                  date: newCreatedHabit.date,
                                  color: newCreatedHabit.color)
             HabitsStore.shared.habits.append(newHabit)
+            NotificationCenter.default.post(name: NSNotification.Name("NewHabbit"), object: nil)
             navigationController?.dismiss(animated: true)
         case .edit:
             for habit in HabitsStore.shared.habits {

@@ -48,6 +48,7 @@ class ProgressCollectionViewCell: UICollectionViewCell {
            super.init(frame: frame)
            layer.cornerRadius = 8
            setupUI() 
+           updateStatus()
        }
 
 

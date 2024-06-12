@@ -14,6 +14,7 @@ class HabitsViewController: UIViewController {
     let detailVC = HabitsDetailViewController()
     var selectedHabit: Habit?
     var progressCell: UICollectionViewCell?
+    let notificationCenter = NotificationCenter.default
 
     private lazy var collectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
@@ -46,9 +47,10 @@ class HabitsViewController: UIViewController {
         title = "Сегодня"
         navigationController?.navigationBar.prefersLargeTitles = true
         collectionView.reloadData()
-        let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(updateProgressCell(_:)), name: NSNotification.Name("progress"), object: nil)
+        notificationCenter.addObserver(self, selector: #selector(updateProgressCell(_:)), name: NSNotification.Name("NewHabbit"), object: nil)
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = mainBackgroundColor
